@@ -14,3 +14,100 @@ Al hacer click en "calcular", mostrar en un elemento pre-existente el mayor sala
 
 Punto bonus: si hay inputs vacíos, ignorarlos en el cálculo (no contarlos como 0).
 */
+
+
+
+
+document.querySelector("#siguiente-paso").onclick = function(event){
+    const $cantidadIntegrantes = document.querySelector("#cantidad-integrantes")
+    const cantidadIntegrantes = Number($cantidadIntegrantes.value)
+
+    borrarIntegrantesAnteriores()
+    crearIntegrantes(cantidadIntegrantes)
+
+    event.preventDefault()
+}
+
+function crearIntegrantes(cantidadIntegrantes){
+    if(cantidadIntegrantes > 0){
+        mostrarBotonCalculo()
+    }else{
+        resetear()
+    }
+
+    for (let i = 0; i < cantidadIntegrantes; i++){
+        crearIntegrante(i)
+    }
+}
+
+function crearIntegrante(indice){
+    const $div = document.createElement("div")
+    $div.className = "integrante"
+    const $label = document.createElement("label")
+    $label.textContent = "Ingrese la edad del integrante numero " + (indice + 1)
+    const $input = document.createElement("input")
+    $input.type = "number" ;
+
+    $div.appendChild($label)
+    $div.appendChild($input)
+
+    const $placeHolder = document.querySelector("#placeholder")
+    $placeHolder.appendChild($div)
+}
+
+
+function borrarIntegrantesAnteriores(){
+    const $integrantes = document.querySelectorAll(".integrante")
+    for (let i = 0; i <$integrantes.length; i++){
+        $integrantes[i].remove()
+    }
+}
+
+document.querySelector("#boton-calcular").onclick = function(event){
+ const numeros = obtenerEdadesIntegrates()
+ mostrarEdad("mayor",obtenerMayorEdad(numeros))
+ mostrarEdad("menor",obtenerMenorEdad(numeros))
+ mostrarEdad("promedio",obtenerEdadPromedio(numeros))
+
+ mostrarResultados()
+ 
+ event.preventDefault()
+}
+
+
+
+function mostrarBotonCalculo(){
+    document.querySelector("#boton-calcular").className = ""
+}
+
+function ocultarBotonCalculo(){
+    document.querySelector("#boton-calcular").className = "oculto"
+
+}
+
+function mostrarEdad(tipo, valor){
+    document.querySelector(`#edad-${tipo}`).textContent = valor
+}
+
+function mostrarResultados(){
+    document.querySelector("#resultados").className = ""
+}
+
+function ocultarResultados(){
+    document.querySelector("#resultados").className = "oculto"
+}
+
+function obtenerEdadesIntegrates(){
+    const $integrantes = document.querySelectorAll(".integrante input")
+    let edades = []
+    for (let i = 0; i < $integrantes.length; i++){
+        edades.push(Number($integrantes[i].value))
+    }
+    return edades
+}
+
+function resetear(){
+    ocultarBotonCalculo()
+    borrarIntegrantesAnteriores()
+    ocultarResultados()
+}
